@@ -2,11 +2,14 @@ package selab.mvc.models.entities;
 
 import selab.mvc.models.Model;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Student implements Model {
     private String name;
     private String studentNo;
+
+    private ArrayList<Registration> registrations = new ArrayList<>();
 
     @Override
     public String getPrimaryKey() {
@@ -42,5 +45,17 @@ public class Student implements Model {
     private boolean validateStudentNo(String studentNo) {
         Pattern pattern = Pattern.compile("^[8-9]\\d{7}$");
         return pattern.matcher(studentNo).find();
+    }
+
+    public void addRegistration(Registration registration){
+        if (!registration.getStudent().getPrimaryKey().equals(this.getPrimaryKey()))
+            throw new RuntimeException("Student number mismatch");
+
+        for (Registration existingRegistration: registrations) {
+            if (existingRegistration.getCourse().getPrimaryKey().equals(registration.getCourse().getPrimaryKey())){
+                throw new RuntimeException("Such course already exists");
+            }
+        }
+        registrations.add(registration);
     }
 }

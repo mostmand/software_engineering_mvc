@@ -1,8 +1,9 @@
 package selab.mvc.models.entities;
 
 import selab.mvc.models.Model;
-import sun.misc.Regexp;
+//import sun.misc.Regexp;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Course implements Model {
@@ -12,6 +13,7 @@ public class Course implements Model {
     private String endTime = null;
     private Weekday weekday;
 
+    private ArrayList<Registration> registrations = new ArrayList<>();
 
     @Override
     public String getPrimaryKey() {
@@ -108,5 +110,17 @@ public class Course implements Model {
             return 0;
         else
             return -1;
+    }
+
+    public void addRegistration(Registration registration){
+        if (!registration.getCourse().getPrimaryKey().equals(this.getPrimaryKey()))
+            throw new RuntimeException("Course number mismatch");
+
+        for (Registration existingRegistration: registrations) {
+            if (existingRegistration.getStudent().getPrimaryKey().equals(registration.getStudent().getPrimaryKey())){
+                throw new RuntimeException("Such student already exists");
+            }
+        }
+        registrations.add(registration);
     }
 }
