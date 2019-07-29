@@ -4,6 +4,7 @@ import selab.mvc.models.Model;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Student implements Model {
     private String name;
@@ -28,13 +29,14 @@ public class Student implements Model {
     public String getStudentNo() { return this.studentNo; }
 
     public float getAverage() {
-        // TODO: Calculate and return the average of the points
-        return 0;
+        if (registrations.size() == 0){
+            return 0;
+        }
+        return (float) registrations.stream().map(Registration::getPoint).mapToDouble(x -> x).sum() / registrations.size();
     }
 
     public String getCourses() {
-        // TODO: Return a comma separated list of course names
-        return "-";
+        return String.join("-", registrations.stream().map(x -> x.getCourse().getTitle()).collect(Collectors.toList()));
     }
 
     /**

@@ -28,6 +28,10 @@ public class Registration implements Model {
         return student;
     }
 
+    public double getPoint() {
+        return point;
+    }
+
     public void setPoint(double point) {
         this.point = point;
     }
